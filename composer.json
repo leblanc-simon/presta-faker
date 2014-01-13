@@ -1,0 +1,38 @@
+{
+    "name": "leblanc-simon/presta-faker",
+    "description": "Init a Prestashop instance with fake values",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Simon Leblanc",
+            "email": "contact@leblanc-simon.eu"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "PrestaFaker\\": "src/"
+        },
+        "files": ["vendor/prestashop/webservice-lib/PSWebServiceLibrary.php"]
+    },
+    "repositories": {
+        "prestashop-webservice": {
+            "type": "package",
+            "package": {
+                "name": "prestashop/webservice-lib",
+                "version": "1.5.6",
+                "source": {
+                    "url": "https://github.com/PrestaShop/PrestaShop-webservice-lib.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        }
+    },
+    "require": {
+        "fzaninotto/faker": "1.3.x-dev",
+        "prestashop/webservice-lib": "1.5.6.*",
+        "symfony/event-dispatcher": "2.4.x-dev",
+        "monolog/monolog": "1.7.0",
+        "symfony/finder": "2.4.x-dev"
+    }
+}

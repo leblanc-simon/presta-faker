@@ -13,7 +13,7 @@ namespace PrestaFaker\Faker\Provider\Car;
 
 use Faker\Provider\Base;
 use PrestaFaker\Core\Config;
-use PrestaFaker\Faker\Provider\ILevel;
+use PrestaFaker\Faker\Provider\LevelInterface;
 use PrestaFaker\Prestashop\Link;
 use Symfony\Component\Finder\Finder;
 
@@ -23,7 +23,7 @@ class Image
     static protected $images = array();
 
 
-    public function init(ILevel $category)
+    public function init(LevelInterface $category)
     {
         $finder = new Finder();
         $finder->files()->in(Config::get('images_dir'));

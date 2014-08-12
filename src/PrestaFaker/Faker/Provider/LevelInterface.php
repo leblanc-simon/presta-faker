@@ -11,7 +11,7 @@
 
 namespace PrestaFaker\Faker\Provider;
 
-interface ILevel
+interface LevelInterface
 {
     public function getAll();
     public function getFirst();

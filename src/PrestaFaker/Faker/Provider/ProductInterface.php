@@ -11,7 +11,7 @@
 
 namespace PrestaFaker\Faker\Provider;
 
-interface IProduct
+interface ProductInterface
 {
     public function productName();
 }

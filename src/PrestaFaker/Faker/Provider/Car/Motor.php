@@ -12,11 +12,11 @@
 namespace PrestaFaker\Faker\Provider\Car;
 
 use Faker\Provider\Base;
-use PrestaFaker\Faker\Provider\ILevel;
+use PrestaFaker\Faker\Provider\LevelInterface;
 
 class Motor
     extends Base
-    implements ILevel
+    implements LevelInterface
 {
     static protected $type = array('Essence', 'Diesel', );
     static protected $liter = array('1.5', '1.8', '2.0', '2.1', '2.2', '3.0', );

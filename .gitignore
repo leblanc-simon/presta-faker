@@ -1,4 +1,3 @@
-.idea
-vendor
+/vendor
 composer.lock
 log/import.log

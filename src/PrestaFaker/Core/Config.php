@@ -40,7 +40,7 @@ class Config
     public static function add($datas)
     {
         foreach ($datas as $key => $value) {
-            Config::set($key, $value, true);
+            self::set($key, $value, true);
         }
     }
 
@@ -59,11 +59,11 @@ class Config
     {
         $name = (string)$name;
 
-        if (isset(Config::$config[$name]) === true && $force === false) {
+        if (isset(self::$config[$name]) === true && $force === false) {
             return false;
         }
 
-        Config::$config[$name] = $value;
+        self::$config[$name] = $value;
         return true;
     }
 
@@ -81,10 +81,10 @@ class Config
     {
         $name = (string)$name;
 
-        if (isset(Config::$config[$name]) === false) {
+        if (isset(self::$config[$name]) === false) {
             return $default;
         }
 
-        return Config::$config[$name];
+        return self::$config[$name];
     }
 }

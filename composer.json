@@ -2,6 +2,7 @@
     "name": "leblanc-simon/presta-faker",
     "description": "Init a Prestashop instance with fake values",
     "minimum-stability": "stable",
+    "license": "MIT",
     "authors": [
         {
             "name": "Simon Leblanc",

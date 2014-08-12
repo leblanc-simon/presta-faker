@@ -12,11 +12,11 @@
 namespace PrestaFaker\Faker\Provider\Car;
 
 use Faker\Provider\Base;
-use PrestaFaker\Faker\Provider\IProduct;
+use PrestaFaker\Faker\Provider\ProductInterface;
 
 class Product
     extends Base
-    implements IProduct
+    implements ProductInterface
 {
     static protected $formats = array(
         '{{constructor}} {{internalProductName}}',

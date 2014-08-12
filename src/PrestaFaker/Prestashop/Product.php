@@ -15,7 +15,7 @@ use Faker\Provider\Base;
 use Monolog\Logger;
 use PrestaFaker\Core\Config;
 use PrestaFaker\Core\Listener;
-use PrestaFaker\Faker\Provider\IProduct;
+use PrestaFaker\Faker\Provider\ProductInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Product
@@ -28,7 +28,7 @@ class Product
     private $text_provider = null;
     private $image_provider = null;
 
-    public function __construct(IProduct $faker_provider, EventDispatcher $dispatcher)
+    public function __construct(ProductInterface $faker_provider, EventDispatcher $dispatcher)
     {
         $this->faker_provider = $faker_provider;
         $this->dispatcher = $dispatcher;

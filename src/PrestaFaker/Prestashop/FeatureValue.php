@@ -13,7 +13,7 @@ namespace PrestaFaker\Prestashop;
 
 use Monolog\Logger;
 use PrestaFaker\Core\Listener;
-use PrestaFaker\Faker\Provider\ILevel;
+use PrestaFaker\Faker\Provider\LevelInterface;
 use PrestaFaker\Core\Config;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -24,7 +24,7 @@ class FeatureValue
     private $id = null;
     private $feature_values = array();
 
-    public function __construct(ILevel $faker_provider, EventDispatcher $dispatcher)
+    public function __construct(LevelInterface $faker_provider, EventDispatcher $dispatcher)
     {
         $this->faker_provider = $faker_provider;
         $this->dispatcher = $dispatcher;

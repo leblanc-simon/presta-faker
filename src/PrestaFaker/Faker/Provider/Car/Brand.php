@@ -12,11 +12,11 @@
 namespace PrestaFaker\Faker\Provider\Car;
 
 use Faker\Provider\Base;
-use PrestaFaker\Faker\Provider\ILevel;
+use PrestaFaker\Faker\Provider\LevelInterface;
 
 class Brand
     extends Base
-    implements ILevel
+    implements LevelInterface
 {
     static protected $brands = array(
         // English

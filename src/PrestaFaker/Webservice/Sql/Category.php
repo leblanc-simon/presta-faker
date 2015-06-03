@@ -118,7 +118,7 @@ BEGIN
         WHERE      `tmp_category_tree`.`nleft` IS NULL
           AND      `parents`.`nleft`  IS NOT NULL
         LIMIT      1;
-u
+
         # Finding the element's parent.
         SELECT  `id_parent`
           INTO  currentParentId

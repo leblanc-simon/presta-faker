@@ -86,12 +86,12 @@ BEGIN
             `nright` = NULL;
 
     # Establishing starting numbers for all root elements.
-    WHILE EXISTS (SELECT * FROM `tmp_category_tree` WHERE `id_parent` IS NULL AND `nleft` IS NULL AND `nright` IS NULL LIMIT 1) DO
+    WHILE EXISTS (SELECT * FROM `tmp_category_tree` WHERE `id_parent` = 0 AND `nleft` IS NULL AND `nright` IS NULL LIMIT 1) DO
 
         UPDATE `tmp_category_tree`
         SET    `nleft`  = startId,
                `nright` = startId + 1
-        WHERE  `id_parent` IS NULL
+        WHERE  `id_parent` = 0
           AND  `nleft`       IS NULL
           AND  `nright`      IS NULL
         LIMIT  1;
@@ -99,6 +99,12 @@ BEGIN
         SET startId = startId + 2;
 
     END WHILE;
+
+    # Switching the indexes for the lft/rght columns to B-Trees to speed up the next section, which uses range queries.
+    DROP INDEX `nleft`  ON `tmp_category_tree`;
+    DROP INDEX `nright` ON `tmp_category_tree`;
+    CREATE INDEX `nleft`  USING BTREE ON `tmp_category_tree` (`nleft`);
+    CREATE INDEX `nright` USING BTREE ON `tmp_category_tree` (`nright`);
 
     # Numbering all child elements
     WHILE EXISTS (SELECT * FROM `tmp_category_tree` WHERE `nleft` IS NULL LIMIT 1) DO
@@ -112,7 +118,7 @@ BEGIN
         WHERE      `tmp_category_tree`.`nleft` IS NULL
           AND      `parents`.`nleft`  IS NOT NULL
         LIMIT      1;
-
+u
         # Finding the element's parent.
         SELECT  `id_parent`
           INTO  currentParentId

@@ -13,22 +13,41 @@ namespace PrestaFaker\Prestashop;
 
 use Monolog\Logger;
 use PrestaFaker\Core\Listener;
+use PrestaFaker\Webservice\WebserviceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class Webservice
+class Webservice implements WebserviceInterface
 {
+    /**
+     * @var \PrestaShopWebservice
+     */
     private $ws = null;
+
+    /**
+     * @var EventDispatcher
+     */
     private $dispatcher = null;
 
+    /**
+     * @var string
+     */
     private $url = null;
+
+    /**
+     * @var string
+     */
     private $key = null;
 
-    public function __construct(\PrestaShopWebservice $ws, EventDispatcher $dispatcher)
+    public function __construct(EventDispatcher $dispatcher)
     {
-        $this->ws = $ws;
         $this->dispatcher = $dispatcher;
 
         $this->extractUrlAndKey();
+    }
+
+    public function setWs(\PrestaShopWebservice $ws)
+    {
+        $this->ws = $ws;
     }
 
 
@@ -77,23 +96,6 @@ class Webservice
 
         $this->dispatcher->dispatch('ws.after.insertImageError', Listener::buildEvent('Failed to insert Image for '.$type.' '.$id, Logger::ERROR));
         return false;
-    }
-
-
-    public function insertXml($resource, $xml)
-    {
-        $datas = array(
-            'resource' => $resource,
-            'postXml' => $xml,
-        );
-        try {
-            $return = $this->ws->add($datas);
-            $this->dispatcher->dispatch('ws.after.insertSuccess', Listener::buildEvent($return->$object->id));
-            return $return->$object->id;
-        } catch (\PrestaShopWebserviceException $e) {
-            $this->dispatcher->dispatch('ws.after.insertError', Listener::buildEvent($e->getMessage(), Logger::ERROR));
-            return false;
-        }
     }
 
 

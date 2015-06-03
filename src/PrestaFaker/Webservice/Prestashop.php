@@ -9,14 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace PrestaFaker\Prestashop;
+namespace PrestaFaker\Webservice;
 
 use Monolog\Logger;
 use PrestaFaker\Core\Listener;
-use PrestaFaker\Webservice\WebserviceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class Webservice implements WebserviceInterface
+class Prestashop implements WebserviceInterface
 {
     /**
      * @var \PrestaShopWebservice
@@ -45,11 +44,15 @@ class Webservice implements WebserviceInterface
         $this->extractUrlAndKey();
     }
 
-    public function setWs(\PrestaShopWebservice $ws)
+    public function setOptions(array $options = [])
     {
-        $this->ws = $ws;
-    }
+        if (isset($options['ws']) === false || ($options['ws'] instanceof \PrestaShopWebservice) === false) {
+            throw new \RuntimeException('ws option is required');
+        }
 
+        $this->ws = $options['ws'];
+        return $this;
+    }
 
     public function insert($object, $resource, array $values = array())
     {

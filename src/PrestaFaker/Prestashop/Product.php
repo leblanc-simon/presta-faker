@@ -16,6 +16,7 @@ use Monolog\Logger;
 use PrestaFaker\Core\Config;
 use PrestaFaker\Core\Listener;
 use PrestaFaker\Faker\Provider\ProductInterface;
+use PrestaFaker\Webservice\WebserviceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Product
@@ -66,7 +67,7 @@ class Product
         $this->image_provider = $image_provider;
     }
 
-    public function inject(Webservice $ws, $nb_products)
+    public function inject(WebserviceInterface $ws, $nb_products)
     {
         $this->dispatcher->dispatch('product.before.inject', Listener::buildEvent(sprintf('inject %d products', $nb_products)));
 
@@ -86,7 +87,7 @@ class Product
         $this->dispatcher->dispatch('product.after.inject', Listener::buildEvent('end inject'));
     }
 
-    private function injectData(Webservice $ws, $reference)
+    private function injectData(WebserviceInterface $ws, $reference)
     {
         $this->dispatcher->dispatch('product.before.injectData', Listener::buildEvent(sprintf('inject the product %s', $reference)));
 

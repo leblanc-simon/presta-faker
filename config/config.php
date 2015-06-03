@@ -42,4 +42,25 @@ PrestaFaker\Core\Config::add(array(
     'max_price' => 1000,
     'log_filename' => dirname(__DIR__).DIRECTORY_SEPARATOR.'log'.DIRECTORY_SEPARATOR.'import.log',
     'images_dir' => dirname(__DIR__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'images',
+
+    // Webservice
+    // - Prestashop webservice
+    /*'webservice' => [
+        'class' => '\\PrestaFaker\\Webservice\\Prestashop',
+        'options' => [
+            'ws' => new \PrestaShopWebservice('http://localhost/prestashop156', '5VT7ZLPC97092JQ5MREQ2ETYL4Y799OI', false)
+        ]
+    ],*/
+    // - SQL
+    'webservice' => [
+        'class' => '\\PrestaFaker\\Webservice\\Sql',
+        'options' => [
+            'filename' => dirname(__DIR__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'result.sql',
+            'image_folder' => '',
+            'table_prefix' => 'ps_', // not required
+            'relations' => [
+                'product' => '\\PrestaFaker\\Webservice\\Sql\\Product',
+            ]
+        ]
+    ],
 ));

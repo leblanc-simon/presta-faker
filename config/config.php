@@ -59,7 +59,7 @@ PrestaFaker\Core\Config::add(array(
             'image_folder' => '',
             'table_prefix' => 'ps_', // not required
             'relations' => [
-                'category' => '\\PrestaFaker\\Webservice\\Sql\\Category',
+                'category' => '\\PrestaFaker\\Webservice\\Sql\\Category', // Caution : run "CALL repair_nested_tree(); after insert SQL"
                 'product' => '\\PrestaFaker\\Webservice\\Sql\\Product',
             ]
         ]

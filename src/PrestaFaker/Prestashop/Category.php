@@ -38,7 +38,7 @@ class Category
     }
 
 
-    private function injectData(array $datas, WebserviceInterface $ws, $parent = 2, $level = 1)
+    private function injectData(array $datas, WebserviceInterface $ws, $parent = 2, $level = 2)
     {
         $this->dispatcher->dispatch('category.before.injectData', Listener::buildEvent('Begin injectData'));
 

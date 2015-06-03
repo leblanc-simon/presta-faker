@@ -38,7 +38,7 @@ class Sql implements WebserviceInterface
      */
     private $ids = [
         'product' => 0,
-        'category' => 1,
+        'category' => 2,
         'product_feature' => 0,
         'product_feature_value' => 0,
     ];

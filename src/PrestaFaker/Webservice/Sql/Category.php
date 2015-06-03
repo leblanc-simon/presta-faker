@@ -188,8 +188,8 @@ EOF;
     }
 
     const CATEGORY_SQL = <<<EOF
-INSERT INTO :prefix:category (`id_category`, `id_parent`, `id_shop_default`, `level_depth`, `nleft`, `nright`, `active`, `date_add`, `date_upd`)
-VALUES (:id:, :id_parent:, :id_shop_default:, :level_depth:, :nleft:, :nright:, :active:, NOW(), NOW());
+INSERT INTO :prefix:category (`id_category`, `id_parent`, `id_shop_default`, `level_depth`, `nleft`, `nright`, `active`, `date_add`, `date_upd`, `is_root_category`)
+VALUES (:id:, :id_parent:, :id_shop_default:, :level_depth:, :nleft:, :nright:, :active:, NOW(), NOW(), :is_root_category:);
 INSERT INTO :prefix:category_lang (`id_category`, `id_shop`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_description`, `meta_keywords`, `meta_title`)
 VALUES (:id:, :id_shop:, :id_lang:, :name:, :description:, :link_rewrite:, :meta_description:, :meta_keywords:, :meta_title:);
 INSERT INTO :prefix:category_shop (`id_category`, `id_shop`, `position`)

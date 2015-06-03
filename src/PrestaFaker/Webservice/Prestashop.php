@@ -109,6 +109,11 @@ class Prestashop implements WebserviceInterface
 
     private function buildInternalXml(array $values, $object)
     {
+        // level_depth isn't allowed in XML webservice
+        if (isset($values['level_depth']) === true) {
+            unset($values['level_depth']);
+        }
+
         $xml = '';
         foreach ($values as $key => $value) {
             if (is_array($value) === true && 'associations' === $key) {

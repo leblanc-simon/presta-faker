@@ -38,7 +38,7 @@ class Sql implements WebserviceInterface
      */
     private $ids = [
         'product' => 0,
-        'category' => 0,
+        'category' => 1,
         'product_feature' => 0,
         'product_feature_value' => 0,
     ];
@@ -144,7 +144,7 @@ class Sql implements WebserviceInterface
             return '';
         }
 
-        $object = new $this->class_relations[$object]($this->table_prefix);
+        $object = new $this->class_relations[$object]($this->table_prefix, $this->dispatcher);
 
         return $object->build($id, $values);
     }

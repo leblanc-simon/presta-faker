@@ -2,16 +2,25 @@
 
 namespace PrestaFaker\Webservice\Sql;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 abstract class SqlAbstract
 {
     protected $table_prefix;
 
     /**
-     * @param string $table_prefix
+     * @var EventDispatcher
      */
-    public function __construct($table_prefix = 'ps_')
+    protected $dispatcher;
+
+    /**
+     * @param string $table_prefix
+     * @param EventDispatcher $dispatcher
+     */
+    public function __construct($table_prefix = 'ps_', EventDispatcher $dispatcher)
     {
         $this->table_prefix = $table_prefix;
+        $this->dispatcher = $dispatcher;
     }
 
     /**

@@ -59,6 +59,7 @@ PrestaFaker\Core\Config::add(array(
             'image_folder' => '',
             'table_prefix' => 'ps_', // not required
             'relations' => [
+                'category' => '\\PrestaFaker\\Webservice\\Sql\\Category',
                 'product' => '\\PrestaFaker\\Webservice\\Sql\\Product',
             ]
         ]

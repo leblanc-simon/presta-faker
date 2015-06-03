@@ -38,7 +38,7 @@ class Category
     }
 
 
-    private function injectData(array $datas, WebserviceInterface $ws, $parent = 2)
+    private function injectData(array $datas, WebserviceInterface $ws, $parent = 2, $level = 1)
     {
         $this->dispatcher->dispatch('category.before.injectData', Listener::buildEvent('Begin injectData'));
 
@@ -57,6 +57,7 @@ class Category
                 'is_root_category' => $parent === 2 ? 1 : 0,
                 'name' => array(Config::get('default_language', 1) => $name),
                 'link_rewrite' => array(Config::get('default_language', 1) => Link::rewrite($name)),
+                'level_depth' => $level,
             );
 
             $id = $ws->insert('category', 'categories', $xml_datas);
@@ -65,7 +66,7 @@ class Category
             }
 
             if (is_array($value) === true) {
-                $this->injectData($value, $ws, $id);
+                $this->injectData($value, $ws, $id, ++$level);
             }
         }
 

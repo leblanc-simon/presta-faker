@@ -65,7 +65,7 @@ BEGIN
     # Temporary MEMORY table to do all the heavy lifting in,
     # otherwise performance is simply abysmal.
     CREATE TABLE `tmp_category_tree` (
-        `id_category` int(10) unsigned NOT NULL DEFAULT '',
+        `id_category` int(10) unsigned NOT NULL DEFAULT 0,
         `id_parent`   int(10)          DEFAULT NULL,
         `nleft`       int(10) unsigned DEFAULT NULL,
         `nright`      int(10) unsigned DEFAULT NULL,
@@ -104,11 +104,11 @@ BEGIN
     WHILE EXISTS (SELECT * FROM `tmp_category_tree` WHERE `nleft` IS NULL LIMIT 1) DO
 
         # Picking an unprocessed element which has a processed parent.
-        SELECT     `tmp_category_tree`.`id`
+        SELECT     `tmp_category_tree`.`id_category`
           INTO     currentId
         FROM       `tmp_category_tree`
         INNER JOIN `tmp_category_tree` AS `parents`
-                ON `tmp_category_tree`.`id_parent` = `parents`.`id`
+                ON `tmp_category_tree`.`id_parent` = `parents`.`id_category`
         WHERE      `tmp_category_tree`.`nleft` IS NULL
           AND      `parents`.`nleft`  IS NOT NULL
         LIMIT      1;
@@ -117,13 +117,13 @@ BEGIN
         SELECT  `id_parent`
           INTO  currentParentId
         FROM    `tmp_category_tree`
-        WHERE   `id` = currentId;
+        WHERE   `id_category` = currentId;
 
         # Finding the parent's nleft value.
         SELECT  `nleft`
           INTO  currentLeft
         FROM    `tmp_category_tree`
-        WHERE   `id` = currentParentId;
+        WHERE   `id_category` = currentParentId;
 
         # Shifting all elements to the right of the current element 2 to the right.
         UPDATE `tmp_category_tree`
@@ -138,7 +138,7 @@ BEGIN
         UPDATE `tmp_category_tree`
         SET    `nleft`  = currentLeft + 1,
                `nright` = currentLeft + 2
-        WHERE  `id`   = currentId;
+        WHERE  `id_category`   = currentId;
 
     END WHILE;
 
@@ -146,7 +146,7 @@ BEGIN
     UPDATE `${table_prefix}category`, `tmp_category_tree`
     SET    `${table_prefix}category`.`nleft`  = `tmp_category_tree`.`nleft`,
            `${table_prefix}category`.`nright` = `tmp_category_tree`.`nright`
-    WHERE  `${table_prefix}category`.`id`   = `tmp_category_tree`.`id`;
+    WHERE  `${table_prefix}category`.`id_category`   = `tmp_category_tree`.`id_category`;
 
     COMMIT;
 

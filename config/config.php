@@ -56,13 +56,14 @@ PrestaFaker\Core\Config::add(array(
         'class' => '\\PrestaFaker\\Webservice\\Sql',
         'options' => [
             'filename' => dirname(__DIR__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'result.sql',
-            'image_folder' => '',
+            'image_folder' => dirname(__DIR__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'img',
             'table_prefix' => 'ps_', // not required
             'relations' => [
                 'category' => '\\PrestaFaker\\Webservice\\Sql\\Category', // Caution : run "CALL repair_nested_tree(); after insert SQL"
                 'product' => '\\PrestaFaker\\Webservice\\Sql\\Product',
                 'product_feature' => '\\PrestaFaker\\Webservice\\Sql\\Feature',
                 'product_feature_value' => '\\PrestaFaker\\Webservice\\Sql\\FeatureValue',
+                'image' => '\\PrestaFaker\\Webservice\\Sql\\Image',
             ]
         ]
     ],

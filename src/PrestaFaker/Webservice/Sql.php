@@ -50,7 +50,23 @@ class Sql implements WebserviceInterface
         'category' => 2,
         'product_feature' => 0,
         'product_feature_value' => 0,
+        'image' => 0,
     ];
+
+    /**
+     * @var array
+     */
+    private $images_paths = [
+        'products' => [
+            'path' => 'p',
+            'object' => 'product',
+        ]
+    ];
+
+    /**
+     * @var array
+     */
+    private $image_positions = [];
 
     public function __construct(EventDispatcher $dispatcher)
     {
@@ -100,29 +116,80 @@ class Sql implements WebserviceInterface
 
     public function addImage($image, $id, $type = 'products')
     {
-        return true;
-        $curl = curl_init($this->url.'/api/images/'.$type.'/'.$id);
-
-        curl_setopt($curl, CURLOPT_HEADER, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLINFO_HEADER_OUT, true);
-        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($curl, CURLOPT_USERPWD, $this->key.':');
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, array('image' => '@'.$image));
-        curl_exec($curl);
-
-        $infos = curl_getinfo($curl);
-
-        curl_close($curl);
-
-        if (isset($infos['http_code']) === true && 200 === $infos['http_code']) {
-            $this->dispatcher->dispatch('ws.after.insertImageSuccess', Listener::buildEvent('Image for '.$type.' '.$id.' is added'));
-            return true;
+        if (isset($this->images_paths[$type]) === false) {
+            $this->dispatcher->dispatch(
+                'ws.after.insertImageError',
+                Listener::buildEvent('None path for '.$type, Logger::ERROR)
+            );
+            return false;
         }
 
-        $this->dispatcher->dispatch('ws.after.insertImageError', Listener::buildEvent('Failed to insert Image for '.$type.' '.$id, Logger::ERROR));
-        return false;
+        if (isset($this->image_positions[$type.'.'.$id]) === true) {
+            $this->image_positions[$type.'.'.$id]++;
+        } else {
+            $this->image_positions[$type.'.'.$id] = 1;
+        }
+
+        $id_image = $this->insert('image', 'image', [
+            'id_product' => $id,
+            'legend' => '',
+            'position' => $this->image_positions[$type.'.'.$id],
+            'cover' => 1 === $this->image_positions[$type.'.'.$id] ? 1 : 0,
+        ]);
+
+        if (false === $id_image) {
+            $this->dispatcher->dispatch(
+                'ws.after.insertImageError',
+                Listener::buildEvent('Fail to insert SQL, don\'t copy image', Logger::ERROR)
+            );
+            return false;
+        }
+
+        $path = $this->buildFolderForImage(
+            $this->images_folder.DIRECTORY_SEPARATOR.$this->images_paths[$type]['path'],
+            $id_image
+        );
+
+        if (is_dir($path) === false) {
+            if (@mkdir($path, 0755, true) === false) {
+                $this->dispatcher->dispatch(
+                    'ws.after.insertImageError',
+                    Listener::buildEvent('Impossible to create '.$path, Logger::ERROR)
+                );
+                return false;
+            }
+        }
+
+        if (@copy($image, $path.DIRECTORY_SEPARATOR.$id_image.'.jpg') === false) {
+            $this->dispatcher->dispatch(
+                'ws.after.insertImageError',
+                Listener::buildEvent('Fail to copy '.$image, Logger::ERROR)
+            );
+            return false;
+        }
+
+        $this->dispatcher->dispatch('ws.after.insertImageSuccess', Listener::buildEvent('Image for '.$type.' '.$id.' is added'));
+        return true;
+    }
+
+    /**
+     * Build the final path where store the image
+     *
+     * @param string $base_path
+     * @param int $id
+     * @return string
+     */
+    private function buildFolderForImage($base_path, $id)
+    {
+        $path = $base_path;
+        $id = (string)$id;
+        $id_length = strlen($id);
+
+        for ($i = 0; $i < $id_length; $i++) {
+            $path .= DIRECTORY_SEPARATOR.$id[$i];
+        }
+
+        return $path;
     }
 
     /**

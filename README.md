@@ -6,11 +6,42 @@ Utilitaire permettant d'insérer un grand nombre de produit aléatoirement dans 
 Utilisation
 -----------
 
+### TL;DR
+
 * Installer les dépendances avec Composer.
 * Modifier le fichier de configuration pour indiquer le nombre de produit à insérer et modifier les classes Faker permettant de générer les catégories, caractéristiques, produits, images, ...
 * Puis lancer la tâche bin/run.php pour insérer l'ensemble des données.
 
-Actuellement, PrestaFaker insére des produits relatif à l'automobile.
+### Version longue
+
+#### Cloner le projet
+
+```bash
+git clone https://github.com/leblanc-simon/presta-faker.git
+```
+
+#### Copier le fichier de configuration et le modifier
+
+```bash
+cd presta-faker
+cp config/config.php.dist config/config.php
+```
+
+Dans ce fichier, les données intéressantes sont :
+
+* nb_products : Le nombre de produit à créer
+* webservice : Permet d'indiquer si vous souhaitez insérer les produits via le webservice de Prestashop (très, très, très long)
+  ou générer un fichier SQL et le dossier d'images associées qu'il vous restera à copier dans votre instance
+* categories, features, features_callback, product_faker, image_faker sont les éléments de configuration qui vous permettront
+  d'insérer les produits, catégories de votre choix (actuellement, PrestaFaker insére des produits relatif à l'automobile.)
+
+
+#### Lancer le programme
+
+```bash
+php bin/run.php
+```
+
 
 Remerciements
 -------------

@@ -10,8 +10,6 @@
  */
 
 PrestaFaker\Core\Config::add(array(
-    'url' => 'http://localhost/prestashop156',
-    'apikey' => '5VT7ZLPC97092JQ5MREQ2ETYL4Y799OI',
     'default_language' => 1,
     'init' => true,
     'init_categories' => true,
@@ -43,12 +41,13 @@ PrestaFaker\Core\Config::add(array(
     'log_filename' => dirname(__DIR__).DIRECTORY_SEPARATOR.'log'.DIRECTORY_SEPARATOR.'import.log',
     'images_dir' => dirname(__DIR__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'images',
 
-    // Webservice
+    // Webservice : choose one of webservice -> Prestashop API or SQL file
     // - Prestashop webservice
     /*'webservice' => [
         'class' => '\\PrestaFaker\\Webservice\\Prestashop',
         'options' => [
-            'ws' => new \PrestaShopWebservice('http://localhost/prestashop156', '5VT7ZLPC97092JQ5MREQ2ETYL4Y799OI', false)
+            // Instance of API Webservice : put the URL of your prestashop and the API Key
+            'ws' => new \PrestaShopWebservice('[Prestashop instance URL]', '[API KEY]', false)
         ]
     ],*/
     // - SQL

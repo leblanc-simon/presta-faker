@@ -1,3 +1,4 @@
+config/config.php
 /vendor
 composer.lock
 log/import.log

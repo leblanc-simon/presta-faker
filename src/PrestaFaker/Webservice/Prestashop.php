@@ -40,8 +40,6 @@ class Prestashop implements WebserviceInterface
     public function __construct(EventDispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
-
-        $this->extractUrlAndKey();
     }
 
     public function setOptions(array $options = [])
@@ -51,6 +49,9 @@ class Prestashop implements WebserviceInterface
         }
 
         $this->ws = $options['ws'];
+
+        $this->extractUrlAndKey();
+
         return $this;
     }
 

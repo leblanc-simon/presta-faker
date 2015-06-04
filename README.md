@@ -1,7 +1,7 @@
 PrestaFaker
 ===========
 
-Utilitaire permettant d'insérer un grand nombre de produit aléatoirement dans Prestashop.
+Utilitaire permettant d'insérer un grand nombre de produit aléatoirement dans Prestashop. [![SensioLabsInsight](https://insight.sensiolabs.com/projects/551e88fd-ed00-457b-8e29-b9e7c0a7efee/mini.png)](https://insight.sensiolabs.com/projects/551e88fd-ed00-457b-8e29-b9e7c0a7efee)
 
 Utilisation
 -----------

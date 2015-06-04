@@ -82,7 +82,7 @@ class Product
 
     public function number()
     {
-        return static::randomNumber(3, 10);
+        return static::numberBetween(1, 10);
     }
 
     public function color()

@@ -35,6 +35,13 @@ Dans ce fichier, les données intéressantes sont :
 * categories, features, features_callback, product_faker, image_faker sont les éléments de configuration qui vous permettront
   d'insérer les produits, catégories de votre choix (actuellement, PrestaFaker insére des produits relatif à l'automobile.)
 
+Attention, si vous utilisez le "webservice" SQL, *après* l'insertion du fichier SQL, il faut exécuter la commande SQL suivante :
+
+```sql
+CALL repair_nested_tree();
+```
+
+Cette procédure permet de rétablir l'arbre des catégories et est créée lors de l'insertion du fichier SQL généré.
 
 #### Lancer le programme
 

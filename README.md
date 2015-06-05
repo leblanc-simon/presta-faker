@@ -49,6 +49,14 @@ Cette procédure permet de rétablir l'arbre des catégories et est créée lors
 php bin/run.php
 ```
 
+#### Cas du SQL
+
+Une fois la tâche finie, vous pouvez :
+
+* insérer la base de données : ```mysql -u root -p -D [database] < data/result.sql```
+* copier les images : ```mv data/img/p/* [your prestashop directory]/img/p/```
+* générer les miniatures des images (cela génére des liens symboliques) :  ```bin/img_presta_th.sh [your prestashop directory]/img/p/```
+
 
 Remerciements
 -------------

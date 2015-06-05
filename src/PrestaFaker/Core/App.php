@@ -18,13 +18,24 @@ use Monolog\Logger;
 use PrestaFaker\Prestashop\Category;
 use PrestaFaker\Prestashop\FeatureValue;
 use PrestaFaker\Prestashop\Product;
-use PrestaFaker\Prestashop\Webservice;
+use PrestaFaker\Webservice\WebserviceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class App {
+class App
+{
+    /**
+     * @var Factory
+     */
     static private $faker;
+
+    /**
+     * @var WebserviceInterface
+     */
     static private $ws;
 
+    /**
+     * @var EventDispatcher
+     */
     static private $dispatcher;
 
     static private $prestashop_category = null;
@@ -96,6 +107,7 @@ class App {
         $listener = new Listener($logger);
 
         self::$dispatcher->addListener('ws.after.buildXml', array($listener, 'onWebservice'));
+        self::$dispatcher->addListener('ws.after.buildSql', array($listener, 'onWebservice'));
         self::$dispatcher->addListener('ws.after.insertSuccess', array($listener, 'onWebservice'));
         self::$dispatcher->addListener('ws.after.insertError', array($listener, 'onWebservice'));
         self::$dispatcher->addListener('ws.after.insertImageSuccess', array($listener, 'onWebservice'));
@@ -128,7 +140,22 @@ class App {
 
     static private function initWebservice()
     {
-        self::$ws = new Webservice(new \PrestaShopWebservice(Config::get('url'), Config::get('apikey'), false), self::$dispatcher);
+        $ws_parameters = Config::get('webservice');
+        if (is_array($ws_parameters) === false) {
+            throw new \RuntimeException('webservice configuration must be an array');
+        }
+
+        if (isset($ws_parameters['class']) === false) {
+            throw new \RuntimeException('webservice configuration must contains class parameter');
+        }
+
+        $options = [];
+        if (isset($ws_parameters['options']) === true) {
+            $options = $ws_parameters['options'];
+        }
+
+        self::$ws = new $ws_parameters['class'](self::$dispatcher);
+        self::$ws->setOptions($options);
     }
 
     static private function initFaker()

@@ -15,6 +15,7 @@ use Monolog\Logger;
 use PrestaFaker\Core\Listener;
 use PrestaFaker\Faker\Provider\LevelInterface;
 use PrestaFaker\Core\Config;
+use PrestaFaker\Webservice\WebserviceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class FeatureValue
@@ -31,7 +32,7 @@ class FeatureValue
     }
 
 
-    public function inject(Webservice $ws, $feature_name)
+    public function inject(WebserviceInterface $ws, $feature_name)
     {
         if ($this->createFeature($ws, $feature_name) === false) {
             throw new \RuntimeException('Impossible to insert the feature');
@@ -42,7 +43,7 @@ class FeatureValue
     }
 
 
-    private function createFeature(Webservice $ws, $feature_name)
+    private function createFeature(WebserviceInterface $ws, $feature_name)
     {
         $this->dispatcher->dispatch('feature.before.createFeature', Listener::buildEvent('Begin createFeature'));
         $xml_datas = array(
@@ -61,7 +62,7 @@ class FeatureValue
     }
 
 
-    private function injectData(array $datas, Webservice $ws)
+    private function injectData(array $datas, WebserviceInterface $ws)
     {
         $this->dispatcher->dispatch('feature.before.injectData', Listener::buildEvent('Begin injectData'));
 

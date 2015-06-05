@@ -9,28 +9,51 @@
  * file that was distributed with this source code.
  */
 
-namespace PrestaFaker\Prestashop;
+namespace PrestaFaker\Webservice;
 
 use Monolog\Logger;
 use PrestaFaker\Core\Listener;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class Webservice
+class Prestashop implements WebserviceInterface
 {
+    /**
+     * @var \PrestaShopWebservice
+     */
     private $ws = null;
+
+    /**
+     * @var EventDispatcher
+     */
     private $dispatcher = null;
 
+    /**
+     * @var string
+     */
     private $url = null;
+
+    /**
+     * @var string
+     */
     private $key = null;
 
-    public function __construct(\PrestaShopWebservice $ws, EventDispatcher $dispatcher)
+    public function __construct(EventDispatcher $dispatcher)
     {
-        $this->ws = $ws;
         $this->dispatcher = $dispatcher;
-
-        $this->extractUrlAndKey();
     }
 
+    public function setOptions(array $options = [])
+    {
+        if (isset($options['ws']) === false || ($options['ws'] instanceof \PrestaShopWebservice) === false) {
+            throw new \RuntimeException('ws option is required');
+        }
+
+        $this->ws = $options['ws'];
+
+        $this->extractUrlAndKey();
+
+        return $this;
+    }
 
     public function insert($object, $resource, array $values = array())
     {
@@ -80,23 +103,6 @@ class Webservice
     }
 
 
-    public function insertXml($resource, $xml)
-    {
-        $datas = array(
-            'resource' => $resource,
-            'postXml' => $xml,
-        );
-        try {
-            $return = $this->ws->add($datas);
-            $this->dispatcher->dispatch('ws.after.insertSuccess', Listener::buildEvent($return->$object->id));
-            return $return->$object->id;
-        } catch (\PrestaShopWebserviceException $e) {
-            $this->dispatcher->dispatch('ws.after.insertError', Listener::buildEvent($e->getMessage(), Logger::ERROR));
-            return false;
-        }
-    }
-
-
     private function buildXml(array $values, $object = null)
     {
         return '<?xml version="1.0" ?><prestashop xmlns:xlink="http://www.w3.org/1999/xlink">'.$this->buildInternalXml($values, $object).'</prestashop>';
@@ -104,6 +110,11 @@ class Webservice
 
     private function buildInternalXml(array $values, $object)
     {
+        // level_depth isn't allowed in XML webservice
+        if (isset($values['level_depth']) === true) {
+            unset($values['level_depth']);
+        }
+
         $xml = '';
         foreach ($values as $key => $value) {
             if (is_array($value) === true && 'associations' === $key) {

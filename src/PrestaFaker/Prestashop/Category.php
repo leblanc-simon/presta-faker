@@ -14,6 +14,7 @@ namespace PrestaFaker\Prestashop;
 use PrestaFaker\Core\Config;
 use PrestaFaker\Core\Listener;
 use PrestaFaker\Faker\Provider\LevelInterface;
+use PrestaFaker\Webservice\WebserviceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Category
@@ -29,7 +30,7 @@ class Category
     }
 
 
-    public function inject(Webservice $ws)
+    public function inject(WebserviceInterface $ws)
     {
         $alls = $this->faker_provider->getAll();
 
@@ -37,7 +38,7 @@ class Category
     }
 
 
-    private function injectData(array $datas, Webservice $ws, $parent = 2)
+    private function injectData(array $datas, WebserviceInterface $ws, $parent = 2, $level = 2)
     {
         $this->dispatcher->dispatch('category.before.injectData', Listener::buildEvent('Begin injectData'));
 
@@ -56,6 +57,7 @@ class Category
                 'is_root_category' => $parent === 2 ? 1 : 0,
                 'name' => array(Config::get('default_language', 1) => $name),
                 'link_rewrite' => array(Config::get('default_language', 1) => Link::rewrite($name)),
+                'level_depth' => $level,
             );
 
             $id = $ws->insert('category', 'categories', $xml_datas);
@@ -64,7 +66,7 @@ class Category
             }
 
             if (is_array($value) === true) {
-                $this->injectData($value, $ws, $id);
+                $this->injectData($value, $ws, $id, ++$level);
             }
         }
 

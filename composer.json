@@ -3,7 +3,6 @@
     "description": "Init a Prestashop instance with fake values",
     "minimum-stability": "stable",
     "license": "MIT",
-    "version": "1.1.0",
     "type": "project",
     "authors": [
         {
